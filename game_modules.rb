@@ -14,7 +14,7 @@ module PlayGame
     puts "1 - Взять карту"
     puts "0 - Пропустить ход"
     decision = gets.to_i
-    return :take_card  if decision == 1? 
+    return :take_card  if decision == 1
     :dealer_turn
   end
 
@@ -27,8 +27,19 @@ module PlayGame
   end
 
   def round_card
-  @cards.delete(@cards.sample)
+    @cards.delete(@cards.sample)
   end
+
+
+  def score(cards)
+    amount = cards.map(&:to_i).sum
+    amount += cards.select {|c| ['J', 'Q', 'K'].include? c[0]}.count * 10 
+  end
+
+  def picture?(cards)
+  @value = 10 if cards.select {|c| ['J', 'Q', 'K'].include?}
+  end
+  
 
 
 end
