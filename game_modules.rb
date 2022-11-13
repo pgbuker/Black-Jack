@@ -19,11 +19,11 @@ module PlayGame
   end
 
   def player_take_card
-    @player_cards << round_card
+    @player_cards << round_card if @player_cards.count <= 10
   end
 
   def dealer_take_card
-    @dealer_cards << round_card
+    @dealer_cards << round_card if @dealer_cards.count <= 2
   end
 
   def round_card
@@ -32,8 +32,17 @@ module PlayGame
 
 
   def score(cards)
-    amount = cards.map(&:to_i).sum
-    amount += cards.select {|c| ['J', 'Q', 'K'].include? c[0]}.count * 10 
+    score = cards.map(&:to_i).sum
+    score += cards.select {|c| ['J', 'Q', 'K'].include? c[0]}.count * 10
+    ace_in_hand = cards.select {|c| ['A'].include? c[0]}.count
+    ace_in_hand.times do
+       if score <= 10
+          score += 11
+       else 
+          score += 1 
+       end
+      end 
+      return score    
   end
 
   def picture?(cards)

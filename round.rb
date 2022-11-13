@@ -10,7 +10,7 @@ def initialize
   @player_score = 0
   @dealer_score = 0 
   @cards = generate_deck
-  @round_end = false
+  @keep_playing = true
 end
 
 def round_console
@@ -42,7 +42,7 @@ end
 
 def end_round_show_cards
   puts "Карты игрока #{@player_cards} Сумма очков: #{score(@player_cards)}"
-  puts "Карты дилера #{@dealer_cards} Сумма очков: #{score(@player_cards)}" 
+  puts "Карты дилера #{@dealer_cards} Сумма очков: #{score(@dealer_cards)}" 
 end
 
 end
