@@ -1,48 +1,66 @@
+# frozen_string_literal: true
+
 class Round
-  include Deck
+  # include Deck
   include PlayGame
-   
+
   attr_reader :player_cards, :dealer_cards, :player_score, :dealer_score, :round_end
 
-def initialize
-  @player_cards = []
-  @dealer_cards = []
-  @player_score = 0
-  @dealer_score = 0 
-  @cards = generate_deck
-  @keep_playing = true
-end
-
-def round_console
-  init_turn
-  show_cards_turn
-  pass_or_take_card
-    
-end
-
-# case pass_or_take_card
-#   when :take_card
-#   player_take_card
-#   when :dealer_turn
-#   dealer_take_card
-# end
-
-
-def init_round
-  2.times do
-    @player_cards << round_card
-    @dealer_cards << round_card
+  def initialize
+    @player_cards = []
+    @dealer_cards = []
+    @player_score = 0
+    @dealer_score = 0
+    @cards = generate_deck
+    @keep_playing = true
   end
-end
 
-def show_cards_turn
-  puts "Карты игрока #{@player_cards} Сумма очков: #{score(@player_cards)}"
-  puts "Карты дилера #{@dealer_cards.map {|card| card = '*'}}" 
-end
+  def round_console
+    start_round
+    show_cards_turn
+    loop do
+      pass_or_take_card
+      show_cards_turn
+      break if @keep_playing == false || @player_cards.count == 3 || @dealer_cards.count == 3
+    end
+    end_round_show_cards
+    round_result
+  end
 
-def end_round_show_cards
-  puts "Карты игрока #{@player_cards} Сумма очков: #{score(@player_cards)}"
-  puts "Карты дилера #{@dealer_cards} Сумма очков: #{score(@dealer_cards)}" 
-end
+  def start_round
+    2.times do
+      @player_cards << round_card
+      @dealer_cards << round_card
+    end
+  end
 
+  def show_cards_turn
+    puts "Карты игрока #{@player_cards} Сумма очков: #{score(@player_cards)}"
+    @player_score = score(@player_cards)
+    puts "Карты дилера #{@dealer_cards.map { |_card| _card = '*' }}"
+    @dealer_score = score(@dealer_cards)
+  end
+
+  def end_round_show_cards
+    puts 'ИТОГ РАУНДА'
+    puts "Карты игрока #{@player_cards} Сумма очков: #{score(@player_cards)}"
+    puts "Карты дилера #{@dealer_cards} Сумма очков: #{score(@dealer_cards)}"
+  end
+
+  def round_result
+    if @player_score > 21 && @dealer_score > 21
+      puts '!!!Никто не выиграл!!!'
+      result = 'Draw'
+    elsif (@player_score > @dealer_score && @player_score <= 21) || @dealer_score > 21
+      puts '!!!ВЫ Победили!!!'
+      result = 'Player Win'
+    elsif (@dealer_score > @player_score && @dealer_score <= 21) || @player_score > 21
+      puts '!!!Победа казино!!!'
+      result = 'Dealer Win'
+    else
+      puts '!!!Ничья!!!'
+      result = 'Draw'
+    end
+    result
+  end
 end

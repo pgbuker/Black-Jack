@@ -1,25 +1,40 @@
-module PlayGame
+# frozen_string_literal: true
 
-  def ask_player_name
-    puts "Введите своё имя для игры: "
-    gets.chomp.capitalize
+module PlayGame
+  def generate_deck
+    Card::SUITS.map { |s| Card::VALUES.map { |v| v.to_s + s } }.flatten
   end
 
-  def welcome
-    puts "Добро пожаловать, хотите сыграть в игру Black Jack? (Y/N)"
+  def ask_player_name
+    puts 'Введите своё имя для игры: '
     gets.chomp.capitalize
   end
 
   def pass_or_take_card
-    puts "1 - Взять карту"
-    puts "0 - Пропустить ход"
-    decision = gets.to_i
-    return :take_card  if decision == 1
-    :dealer_turn
+    puts '1 - Взять карту'
+    puts '5 - Вскрыть карты'
+    puts '0 - Пропустить ход'
+    case gets.to_i
+    when 1
+      player_take_card
+      dealer_decision
+    when 0
+      dealer_decision
+    when 5
+      @keep_playing = false
+    end
+  end
+
+  def dealer_decision
+    if @dealer_score < 17
+      dealer_take_card
+    else
+      puts 'Дилер пропускает ход'
+    end
   end
 
   def player_take_card
-    @player_cards << round_card if @player_cards.count <= 10
+    @player_cards << round_card if @player_cards.count <= 2
   end
 
   def dealer_take_card
@@ -30,25 +45,22 @@ module PlayGame
     @cards.delete(@cards.sample)
   end
 
-
   def score(cards)
     score = cards.map(&:to_i).sum
-    score += cards.select {|c| ['J', 'Q', 'K'].include? c[0]}.count * 10
-    ace_in_hand = cards.select {|c| ['A'].include? c[0]}.count
+    score += cards.select { |c| %w[J Q K].include? c[0] }.count * 10
+    ace_in_hand = cards.select { |c| ['A'].include? c[0] }.count
     ace_in_hand.times do
-       if score <= 10
-          score += 11
-       else 
-          score += 1 
-       end
-      end 
-      return score    
+      score += if score <= 10
+                 11
+               else
+                 1
+               end
+    end
+    score
   end
 
-  def picture?(cards)
-  @value = 10 if cards.select {|c| ['J', 'Q', 'K'].include?}
+  def show_exception(exception)
+    puts 'Неправильно введены данные!'
+    puts " #{exception.message} "
   end
-  
-
-
 end

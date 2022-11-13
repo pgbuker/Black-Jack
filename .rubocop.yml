@@ -1,0 +1,35 @@
+AllCops:
+  NewCops: enable
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: true
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+Lint/UselessSetterCall:
+  Enabled: true
+
+Lint/UselessMethodDefinition:
+  Enabled: true
+
+Lint/UselessAssignment:
+  Enabled: true
+
+Style/Documentation:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 150
