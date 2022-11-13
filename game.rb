@@ -49,6 +49,7 @@ class Game
   def bet
     if START_PLAYER_BALANCE.positive?
       @bet = BET
+      @player_balance -= @bet
       puts 'Сделана ставка 10$'
     else
       puts 'Извините, но ваш баланс пуст!'
@@ -61,7 +62,9 @@ class Game
     when 'Player Win'
       @player_balance += @bet * 2
     when 'Dealer Win'
-      @player_balance -= @bet * 2
+      @player_balance
+    when 'Draw'
+      @player_balance += @bet
     end
   end
 
