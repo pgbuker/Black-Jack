@@ -15,37 +15,26 @@ class Game
   end
 
   def start_game
-    welcome
-    loop do
-      show_balance
-      case continuance_choice
-      when 'Y'
-        bet
-        @current_round = Round.new
-        balance(@current_round.round_console)
-      when 'N'
-        puts 'Спасибо за игру!'
-        exit
-      end
-    end
-  end
-
-  def welcome
     puts "#{@player_name}, добро пожаловать в игру BlackJack!"
-    attempt = 0
-    begin
-      case continuance_choice
-      when 'Y'
-        puts "#{@player_name}, Ваш балланс: #{@player_balance}$"
-      when 'N'
-        puts 'До скорых встреч!'
-        exit
+    loop do
+      attempt = 0
+      begin
+        case continuance_choice
+        when 'Y'
+          puts "#{@player_name}, Ваш балланс: #{@player_balance}$"
+          bet
+          @current_round = Round.new
+          balance(@current_round.round_console)
+        when 'N'
+          puts 'Спасибо за игру, до скорых встреч!'
+          exit
+        end
+      rescue StandardError => e
+        attempt += 1
+        show_exception(e)
+        retry if attempt < 3
+        puts 'Обратитесь к персоналу, техническая проблема!'
       end
-    rescue StandardError => e
-      attempt += 1
-      show_exception(e)
-      retry if attempt < 3
-      puts 'Обратитесь к персоналу, техническая проблема!'
     end
   end
 
