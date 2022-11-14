@@ -5,6 +5,7 @@ class Game
 
   START_PLAYER_BALANCE = 100
   BET = 10
+  NUMBER_OF_PLAYERS = 2
 
   attr_reader :player_name, :player_balance, :current_round
 
@@ -60,7 +61,7 @@ class Game
   def balance(result)
     case result
     when 'Player Win'
-      @player_balance += @bet * 2
+      @player_balance += @bet * NUMBER_OF_PLAYERS
     when 'Dealer Win'
       @player_balance
     when 'Draw'

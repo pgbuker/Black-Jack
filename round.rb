@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class Round
-  # include Deck
   include PlayGame
+
+  MAX_POINTS = 21
 
   attr_reader :player_cards, :dealer_cards, :player_score, :dealer_score, :round_end
 
@@ -48,13 +49,13 @@ class Round
   end
 
   def round_result
-    if @player_score > 21 && @dealer_score > 21
+    if @player_score > MAX_POINTS && @dealer_score > MAX_POINTS
       puts '!!!Никто не выиграл!!!'
       result = 'Draw'
-    elsif (@player_score > @dealer_score && @player_score <= 21) || @dealer_score > 21
+    elsif (@player_score > @dealer_score && @player_score <= MAX_POINTS) || @dealer_score > MAX_POINTS
       puts '!!!ВЫ Победили!!!'
       result = 'Player Win'
-    elsif (@dealer_score > @player_score && @dealer_score <= 21) || @player_score > 21
+    elsif (@dealer_score > @player_score && @dealer_score <= MAX_POINTS) || @player_score > MAX_POINTS
       puts '!!!Победа казино!!!'
       result = 'Dealer Win'
     else

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module PlayGame
+  DEALER_MAX_POINT_DECISION = 17
+
   def generate_deck
     Card::SUITS.map { |s| Card::VALUES.map { |v| v.to_s + s } }.flatten
   end
@@ -26,7 +28,7 @@ module PlayGame
   end
 
   def dealer_decision
-    if @dealer_score < 17
+    if @dealer_score < DEALER_MAX_POINT_DECISION
       dealer_take_card
     else
       puts 'Дилер пропускает ход'
@@ -47,13 +49,13 @@ module PlayGame
 
   def score(cards)
     score = cards.map(&:to_i).sum
-    score += cards.select { |c| %w[J Q K].include? c[0] }.count * 10
+    score += cards.select { |c| %w[J Q K].include? c[0] }.count * Card::PICTURE
     ace_in_hand = cards.select { |c| ['A'].include? c[0] }.count
     ace_in_hand.times do
       score += if score <= 10
-                 11
+                 Card::MAX_ACE
                else
-                 1
+                 Card::MIN_ACE
                end
     end
     score
